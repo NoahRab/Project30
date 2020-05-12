@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+      $(function() {
+        
+        $("#loginEmail").focus(function() {
+          $("#invalid").attr("hidden", "hidden");
+          $("#loggedin").attr("hidden", "hidden");
+        });
+        $("#registerEmail").focus(function() {
+          $("#exists").attr("hidden", "hidden");
+          $("#mismatch").attr("hidden", "hidden");
+          $("#registered").attr("hidden", "hidden");
+          $("#register").removeAttr("disabled");
+        });
+        $("#registerEmail").blur(function() {
+          let email = $("#registerEmail").val();
+          if(localStorage.getItem(email) != undefined) {
+            $("#exists").removeAttr("hidden");
+            $("#register").attr("disabled", "disabled");
+          }
+        });
+        
+        $("#login").click(function(event) {
+      
+          event.preventDefault();
+          $("#loggedin").attr("hidden", "hidden");
+          $("#invalid").attr("hidden", "hidden");
+          let email = $("#loginEmail").val();
+          let pass = $("#loginPass").val();
+          
+          if(localStorage.getItem(email) == pass) {
+           
+            $("#loggedin").removeAttr("hidden");
+            
+            localStorage.setItem("student", email);
+            
+            setTimeout(function() {
+              window.location.href = "WebDev_Proj30.html";
+            }, 500);
+          } else {
+            $("#invalid").removeAttr("hidden");
+          }
+          $("#loginPass").val('');
+        });
+        $("#register").click(function(event) {
+          event.preventDefault();
+          $("#exists").attr("hidden", "hidden");
+          $("#mismatch").attr("hidden", "hidden");
+          $("#registered").attr("hidden", "hidden");
+          let email = $("#registerEmail").val();
+          let pass = $("#registerPass").val();
+          let repeat = $("#registerRepeat").val();
+          if(localStorage.getItem(email) != undefined) {
+            $("#exists").removeAttr("hidden");
+          } else {
+            if(pass != repeat) {
+              $("#mismatch").removeAttr("hidden");
+            } else {
+              localStorage.setItem(email, pass);
+              $("#registered").removeAttr("hidden");
+              setTimeout(function() {
+                $("#registerClose").click();
+              }, 750);
+            }
+          }
+          $("#registerPass").val('');
+          $("#registerRepeat").val('');
+        });
+      });
+    </script>
+</head>
+<body>
+       <header>
+        <nav class="menu">
+            <ul class="menu">
+                <li>
+                    <a href="WebDevProj30.html">Home</a>
+                 </li>
+                <li>
+                    <a href="WebDevProj30.html">Overview</a>
+                </li>
+                <li>
+                    <a href="WebDevProj30.html">Features</a>
+                </li>
+                <li>
+                    <a href="WebDevProj30.html">Giveaways</a>
+                </li>
+                <li>
+                    <a href="WebDevProj30.html">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <style>
+        nav{
+    height: 60px;
+    width: 100%;
+    background-color: #343233;
+    position: fixed;
+            z-index: 9999;
+}
+
+nav ul{
+    padding: 0;
+    margin: 0;
+}
+
+nav li{
+    display: inline;
+    float: left;
+}
+
+nav a {
+    display: inline-block;
+    width: 100px;
+    font-weight: 400;
+    text-align: center;
+    text-decoration: none;
+    padding: 20px 0;
+    color: #8D8273;
+    transition: 1s;
+}
+
+nav a:hover{
+    color: #C0CF1F;
+}
+
+nav a#toggle-btn{
+    display: none;
+}
+        .modal-body{
+            padding-top:70px;
+        }
+    
+    </style>
+     <form>
+            <div class="modal-body">
+              <div id="exists" class="form-group alert alert-danger" hidden="hidden">
+                Email address already exists!
+              </div>
+              <div id="mismatch" class="form-group alert alert-danger" hidden="hidden">
+                Passwords do not match!
+              </div>
+              <div id="registered" class="form-group alert alert-success" hidden="hidden">
+                Register Successful!
+              </div>
+              <div class="form-group">
+                <input id="registerEmail" class="form-control" name="email" type="email" placeholder="Enter your Email">
+              </div>
+              <div class="form-group">
+                <input id="registerPass" class="form-control" name="pass" type="password" placeholder="Create a password">
+              </div>
+              <div class="form-group">
+                <input id="registerRepeat" class="form-control" name="repeat" type="password" placeholder="Confirm your password">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="form-actions">
+                <button id="register" class="btn btn-success" type="submit">Register</button>
+              </div>
+            </div>
+          </form>
+</body>
+</html>
